@@ -18,7 +18,6 @@ class Main extends Component {
         const { categories } = this.props;
 
         return categories.map((category) => {
-            console.log(category);
             return (
                 <li key={ category.id }>
                     <Link to={`/category/${ category.id }`}>{ category.name }</Link>

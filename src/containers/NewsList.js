@@ -34,7 +34,7 @@ class NewsList extends Component {
 
             return (
                 <li key={ newsItem.id }>
-                    <Link to={`/category/${ id }`} >{ title }</Link>
+                    <Link to={`/news/${ id }`}>{ title }</Link>
                     <div className="news-item__date">{ newsDate }</div>
                     <div className="news-item__desc">{ shortDescription }</div>
                 </li>
