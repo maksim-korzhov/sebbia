@@ -2,20 +2,27 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { getCategoryNews } from "actions";
+import { getCategoryNews, changePage } from "actions";
+
+import Pagination from "components/Pagination";
 
 class NewsList extends Component {
     constructor(props) {
         super(props);
 
         this.categoryId = parseInt(props.match.params.categoryId);
+        this.pageNumber = props.match.params.pageNumber ? parseInt(props.match.params.pageNumber) : 0;
     }
 
     componentWillMount() {
         const { dispatch } = this.props;
 
-        dispatch(getCategoryNews(this.categoryId));
+        dispatch(getCategoryNews(this.categoryId, this.pageNumber));
     }
+
+    /*componentWillUpdate() {
+        this.pageNumber = props.match.params.pageNumber ? parseInt(props.match.params.pageNumber) : 0;
+    }*/
 
     isNoNews() {
         return !this.props.newsList
@@ -23,7 +30,7 @@ class NewsList extends Component {
     }
 
     renderNewsList() {
-        const { newsList, currentPage } = this.props;
+        const { newsList } = this.props;
 
         return Object.keys(newsList).map(index => {
             const { id, title, date, shortDescription, categoryId } = newsList[index];
@@ -42,9 +49,33 @@ class NewsList extends Component {
         });
     }
 
+    onPageClickHandler(pageNumber) {
+        this.props.dispatch(changePage(pageNumber, this.categoryId));
+    }
+
     render() {
+        this.pageNumber = this.props.match.params.pageNumber ? parseInt(this.props.match.params.pageNumber) : 0;
+
         return (
-             this.isNoNews() ? <div>Нет новостей</div> : <ul className="news-list">{ this.renderNewsList() }</ul>
+             this.isNoNews() ?
+                 <div>
+                     Нет новостей
+                     <Pagination
+                         currentPage={ this.pageNumber }
+                         isNextPage={ false }
+                         baseLink={ `/category/${ this.categoryId }` }
+                         onPageClick={ this.onPageClickHandler.bind(this) }
+                     />
+                 </div> :
+                 <div>
+                     <ul className="news-list">{ this.renderNewsList() }</ul>
+                     <Pagination
+                        currentPage={ this.pageNumber }
+                        isNextPage={ true }
+                        baseLink={ `/category/${ this.categoryId }` }
+                        onPageClick={ this.onPageClickHandler.bind(this) }
+                     />
+                 </div>
         );
     }
 }

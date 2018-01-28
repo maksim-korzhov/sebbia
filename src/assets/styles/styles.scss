@@ -1,4 +1,20 @@
 body {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+    list-style: none;
+}
+
+.news-list li + li {
+  margin-top: 20px;
+}
+
+nav {
+  margin: 20px auto;
+}
+
+.pagination {
+  justify-content: center;
 }

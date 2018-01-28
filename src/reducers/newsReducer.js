@@ -1,12 +1,15 @@
 import {
     FETCH_CATEGORIES_SUCCESS,
     FETCH_CATEGORY_NEWS_SUCCESS,
-    FETCH_NEWS_DETAILS_SUCCESS
+    FETCH_NEWS_DETAILS_SUCCESS,
+    CHANGE_PAGE
 } from "actions/types";
 
 const initialState = {
     categories: {},
-    news: {}
+    news: {
+        currentPage: 0
+    }
 };
 
 const newsReducer = (state = initialState, action) => {
@@ -31,10 +34,8 @@ const newsReducer = (state = initialState, action) => {
                 news: {
                     ...state.news,
                     newsList: {
-                        ...state.news.newsList,
                         ...newsObj
                     },
-                    currentPage: 0
                 }
             };
 
@@ -52,10 +53,17 @@ const newsReducer = (state = initialState, action) => {
                     newsList: {
                         ...state.news.newsList,
                         ...newsDetailObj
-                    },
-                    currentPage: 0
+                    }
                 }
             };
+        case CHANGE_PAGE:
+            return {
+                ...state,
+                news: {
+                    ...state.news,
+                    currentPage: action.pageNumber
+                }
+            }
     }
 
     return state;

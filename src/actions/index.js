@@ -4,12 +4,16 @@ import {
     FETCH_CATEGORIES,
     FETCH_CATEGORIES_SUCCESS,
     FETCH_CATEGORIES_FAILED,
+
     FETCH_CATEGORY_NEWS,
     FETCH_CATEGORY_NEWS_SUCCESS,
     FETCH_CATEGORY_NEWS_FAILED,
+
     FETCH_NEWS_DETAILS,
     FETCH_NEWS_DETAILS_SUCCESS,
-    FETCH_NEWS_DETAILS_FAILED
+    FETCH_NEWS_DETAILS_FAILED,
+
+    CHANGE_PAGE
 } from "actions/types";
 
 import {
@@ -99,11 +103,14 @@ const getCategoryNewsFailed = (error) => {
  * @params categoryId
  * @returns {Function}
  */
-const getCategoryNewsAsync = (categoryId) => {
+const getCategoryNewsAsync = (categoryId, page) => {
+    const currentPage = page ? page : 0;
+
     return () => {
         store.dispatch({ type: FETCH_CATEGORY_NEWS });
 
-        const url = CATEGORY_NEWS_LIST_URL.replace(/{id}/, categoryId);
+        let url = CATEGORY_NEWS_LIST_URL.replace(/{id}/, categoryId);
+        url += `?page=${ currentPage }`;
 
         fetchData(url).then((response) => {
             store.dispatch(getCategoryNewsSuccess(response, categoryId));
@@ -118,8 +125,8 @@ const getCategoryNewsAsync = (categoryId) => {
  * @params categoryId
  * @returns {Function}
  */
-export function getCategoryNews(categoryId) {
-    return () => store.dispatch(getCategoryNewsAsync(categoryId));
+export function getCategoryNews(categoryId, page) {
+    return () => store.dispatch(getCategoryNewsAsync(categoryId, page));
 }
 
 
@@ -173,4 +180,17 @@ const getNewsInfoAsync = (newsId) => {
  */
 export function getNewsInfo(newsId) {
     return () => store.dispatch(getNewsInfoAsync(newsId));
+}
+
+
+/**
+ * Dispatch async request to server for news details.
+ * @params categoryId
+ * @returns {Function}
+ */
+export function changePage(pageNumber, categoryId) {
+    return () => {
+        store.dispatch({ type: CHANGE_PAGE, pageNumber });
+        store.dispatch(getCategoryNews(categoryId, pageNumber ));
+    }
 }
