@@ -8,7 +8,7 @@ import "assets/styles/styles.scss";
 
 import { store } from "store";
 
-import App from "components/App";
+import App from "containers/App";
 
 
 const renderApp = Component => {
@@ -27,5 +27,5 @@ const renderApp = Component => {
 renderApp(App);
 
 if(module.hot) {
-	module.hot.accept("components/App", () => { renderApp(App) });
+	module.hot.accept("containers/App", () => { renderApp(App) });
 }

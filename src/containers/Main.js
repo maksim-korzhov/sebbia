@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { getCategories } from "actions";
 
@@ -9,7 +10,7 @@ class Main extends Component {
         dispatch(getCategories());
     }
 
-    isCategoriesEmpty() {
+    isNoCategories() {
         return !Object.keys(this.props.categories).length;
     }
 
@@ -18,13 +19,17 @@ class Main extends Component {
 
         return categories.map((category) => {
             console.log(category);
-            return <li key={ category.id }>{ category.name }</li>;
+            return (
+                <li key={ category.id }>
+                    <Link to={`/category/${ category.id }`}>{ category.name }</Link>
+                </li>
+            );
         });
     }
 
     render() {
         return (
-             this.isCategoriesEmpty() ? <div>Loading...</div> : <ul className="main">{ this.renderCategoriesList() }</ul>
+             this.isNoCategories() ? <div>Loading...</div> : <ul className="main">{ this.renderCategoriesList() }</ul>
         );
     }
 }
