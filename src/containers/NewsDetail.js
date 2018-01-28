@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-//import { getCategoryNews } from "actions";
+import { getNewsInfo } from "actions";
 
 class NewsDetail extends Component {
     constructor(props) {
@@ -13,45 +13,35 @@ class NewsDetail extends Component {
 
 
     componentWillMount() {
+        const { dispatch } = this.props;
 
+        dispatch(getNewsInfo(this.newsId));
     }
 
-    getItemInfo() {
-        const { newsList } = this.props;
-        const data = {};
-
-        for( const categoryId in newsList ) {
-            newsList[categoryId].forEach( item => {
-                if( item.id === this.newsId ) {
-                    data.categoryId = categoryId;
-                    data.info = item;
-                }
-            });
-        }
-
-        return data;
+    isNoDetailInfo() {
+        return !this.props.newsList
+            || !this.props.newsList[this.newsId];
     }
 
-    isNoDetailInfo(info) {
-        return !Object.keys(info).length;
-    }
-
-    renderNewsDetail(detailInfo) {
-        const { info: { title, shortDescription } }  = detailInfo;
+    renderNewsDetail() {
+        const detailInfo = this.props.newsList[this.newsId];
+        const { title, shortDescription }  = detailInfo;
+        const fullDescription = {
+            __html: detailInfo.fullDescription ? detailInfo.fullDescription : ""
+        };
 
         return (
             <div className="news-detail">
                 <h1 className="news-detail__title">{ title }</h1>
                 <div className="news-detail__description">{ shortDescription }</div>
+                <div className="news-detail__full-description" dangerouslySetInnerHTML={ fullDescription } />
             </div>
         );
     }
 
     render() {
-        const detailInfo = this.getItemInfo();
-
         return (
-            this.isNoDetailInfo(detailInfo) ? <div>Нет информации</div> : this.renderNewsDetail(detailInfo)
+            this.isNoDetailInfo() ? <div>Нет информации</div> : this.renderNewsDetail()
         );
     }
 }

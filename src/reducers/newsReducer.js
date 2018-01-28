@@ -1,6 +1,7 @@
 import {
     FETCH_CATEGORIES_SUCCESS,
-    FETCH_CATEGORY_NEWS_SUCCESS
+    FETCH_CATEGORY_NEWS_SUCCESS,
+    FETCH_NEWS_DETAILS_SUCCESS
 } from "actions/types";
 
 const initialState = {
@@ -17,17 +18,44 @@ const newsReducer = (state = initialState, action) => {
             };
 
         case FETCH_CATEGORY_NEWS_SUCCESS:
+            const newsObj = {};
+
+            action.newsList.data.list.forEach(item => {
+                item.categoryId = action.categoryId;
+
+                newsObj[item.id] = item;
+            });
+
             return {
                 ...state,
                 news: {
                     ...state.news,
                     newsList: {
                         ...state.news.newsList,
-                        [action.categoryId]: action.newsList.data.list
+                        ...newsObj
                     },
                     currentPage: 0
                 }
-            }
+            };
+
+        case FETCH_NEWS_DETAILS_SUCCESS:
+            const { news } = action.newsDetail.data;
+
+            const newsDetailObj = {
+                [news.id]: news
+            };
+
+            return {
+                ...state,
+                news: {
+                    ...state.news,
+                    newsList: {
+                        ...state.news.newsList,
+                        ...newsDetailObj
+                    },
+                    currentPage: 0
+                }
+            };
     }
 
     return state;

@@ -20,25 +20,25 @@ class NewsList extends Component {
     isNoNews() {
         return !this.props.newsList
             || !Object.keys(this.props.newsList).length
-            || !this.props.newsList[this.categoryId]
-            || !this.props.newsList[this.categoryId].length
     }
 
     renderNewsList() {
         const { newsList, currentPage } = this.props;
 
-        return newsList[this.categoryId].map((newsItem) => {
-            const { id, title, date, shortDescription } = newsItem;
+        return Object.keys(newsList).map(index => {
+            const { id, title, date, shortDescription, categoryId } = newsList[index];
 
-            const newsDate = new Intl.DateTimeFormat("ru-ru").format(Date.parse(date));
+            if( categoryId === this.categoryId ) {
+                const newsDate = new Intl.DateTimeFormat("ru-ru").format(Date.parse(date));
 
-            return (
-                <li key={ newsItem.id }>
-                    <Link to={`/news/${ id }`}>{ title }</Link>
-                    <div className="news-item__date">{ newsDate }</div>
-                    <div className="news-item__desc">{ shortDescription }</div>
-                </li>
-            );
+                return (
+                    <li key={id}>
+                        <Link to={`/news/${ id }`}>{title}</Link>
+                        <div className="news-item__date">{newsDate}</div>
+                        <div className="news-item__desc">{shortDescription}</div>
+                    </li>
+                );
+            }
         });
     }
 
