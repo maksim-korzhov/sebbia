@@ -29,37 +29,43 @@ import { store } from "store";
  * @param data - result of request to the server, it's a promise
  * @returns {{ type: String, categories: Promise<Array> }}
  */
-const getCategoriesSuccess = (data) => {
+/*const getCategoriesSuccess = (data) => {
     return {
         type: FETCH_CATEGORIES_SUCCESS,
         categories: data
     }
-};
+};*/
 
 /**
  * Action creator, triggers on error while fetching categories.
  * @param error
  * @returns {{ type: String, error: String }}
  */
-const getCategoriesFailed = (error) => {
+/*const getCategoriesFailed = (error) => {
     return {
         type: FETCH_CATEGORIES_FAILED,
         error: error
     }
-};
+};*/
 
 /**
  * Send request to server for categories list.
  * @returns {Function}
  */
-const getCategoriesAsync = () => {
+export const getCategories = () => {
     return () => {
         store.dispatch({ type: FETCH_CATEGORIES });
 
         fetchData(CATEGORIES_LIST_URL).then((response) => {
-            store.dispatch(getCategoriesSuccess(response));
+            store.dispatch({
+                type: FETCH_CATEGORIES_SUCCESS,
+                categories: response
+            });
         }).catch((error) => {
-            store.dispatch(getCategoriesFailed(error));
+            store.dispatch({
+                type: FETCH_CATEGORIES_FAILED,
+                error: error
+            });
         });
     }
 };
@@ -68,9 +74,9 @@ const getCategoriesAsync = () => {
  * Dispatch async request to server for categories list.
  * @returns {Function}
  */
-export function getCategories() {
+/*export function getCategories() {
     return () => store.dispatch(getCategoriesAsync());
-}
+}*/
 
 
 /**

@@ -57,25 +57,31 @@ class NewsList extends Component {
         this.pageNumber = this.props.match.params.pageNumber ? parseInt(this.props.match.params.pageNumber) : 0;
 
         return (
-             this.isNoNews() ?
-                 <div>
-                     Нет новостей
-                     <Pagination
-                         currentPage={ this.pageNumber }
-                         isNextPage={ false }
-                         baseLink={ `/category/${ this.categoryId }` }
-                         onPageClick={ this.onPageClickHandler.bind(this) }
-                     />
-                 </div> :
-                 <div>
-                     <ul className="news-list">{ this.renderNewsList() }</ul>
-                     <Pagination
-                        currentPage={ this.pageNumber }
-                        isNextPage={ true }
-                        baseLink={ `/category/${ this.categoryId }` }
-                        onPageClick={ this.onPageClickHandler.bind(this) }
-                     />
-                 </div>
+            <div>
+                <Link to="/" className="btn btn-primary button-back">← К списку разделов</Link>
+
+                {
+                    this.isNoNews() ?
+                        <div>
+                            Нет новостей
+                            <Pagination
+                                currentPage={this.pageNumber}
+                                isNextPage={false}
+                                baseLink={`/category/${ this.categoryId }`}
+                                onPageClick={this.onPageClickHandler.bind(this)}
+                            />
+                        </div> :
+                        <div>
+                            <ul className="news-list">{this.renderNewsList()}</ul>
+                            <Pagination
+                                currentPage={this.pageNumber}
+                                isNextPage={true}
+                                baseLink={`/category/${ this.categoryId }`}
+                                onPageClick={this.onPageClickHandler.bind(this)}
+                            />
+                        </div>
+                }
+            </div>
         );
     }
 }
