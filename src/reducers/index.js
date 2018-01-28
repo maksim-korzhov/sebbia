@@ -1,8 +1,5 @@
-import {combineReducers} from "redux";
-
-function newsReducer(store = []) {
-    return store;
-}
+import { combineReducers } from "redux";
+import newsReducer from "reducers/newsReducer";
 
 export default combineReducers({
     newsReducer
