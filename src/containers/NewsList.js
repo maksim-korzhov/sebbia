@@ -63,7 +63,9 @@ class NewsList extends Component {
                 {
                     this.isNoNews() ?
                         <div>
-                            Нет новостей
+                            <ul>
+                                <li>Нет новостей</li>
+                            </ul>
                             <Pagination
                                 currentPage={this.pageNumber}
                                 isNextPage={false}
